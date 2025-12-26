@@ -1,5 +1,5 @@
 ﻿using ManagerWorkers.Application.DataTransferObjects;
-using ManagerWorkers.Application.Services;
+using ManagerWorkers.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManagerWorkers.API.Controllers
@@ -10,36 +10,29 @@ namespace ManagerWorkers.API.Controllers
     {
 
         /* ****  PROPRIEDADES   **** */
-        public readonly AuthService _authService;
+        private readonly ILoginService _loginService;
+        private readonly IRegisterUserService _registerUserService;
 
 
-        public AuthenticationController(AuthService authService)
+        public AuthenticationController(ILoginService loginService, IRegisterUserService registerUserService)
         {
-            this._authService = authService;
+            this._loginService = loginService;
+            this._registerUserService = registerUserService;
         }
 
         [HttpPost("login")]
-        public ActionResult Login(LoginDTO loginDados)
+        public IActionResult Login(LoginDTO loginDados)
         {
-            try
-            {
-                _authService.UserAuthentication(loginDados);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return Unauthorized(new { error = ex.Message });
-            }
-
-        }
-
-        [HttpPost("register")]
-        public ActionResult Register()
-        {
+            this._loginService.UserAuthentication(loginDados);
             return Ok();
         }
 
-
+        [HttpPost("register")]
+        public IActionResult Register(RegisterUserDTO user)
+        {
+            this._registerUserService.RegisterUser(user);
+            return Ok();
+        }
 
     }
 }

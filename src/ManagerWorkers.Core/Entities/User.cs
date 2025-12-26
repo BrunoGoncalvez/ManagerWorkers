@@ -13,5 +13,13 @@ namespace ManagerWorkers.Core.Entities
 
         public DateTime CreatedIn { get; set; }
 
+        public DateTime UpdatedIn { get; set; }
+
+        // Foreign Key
+        public int RoleId { get; set; }
+
+        // Navegação
+        public Role Role { get; set; } = new();
+
     }
 }

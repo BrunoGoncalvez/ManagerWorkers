@@ -1,4 +1,5 @@
 using ManagerWorkers.Application.Services;
+using ManagerWorkers.Application.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IRegisterUserService, RegisterUserService>();
 
 var app = builder.Build();
 
