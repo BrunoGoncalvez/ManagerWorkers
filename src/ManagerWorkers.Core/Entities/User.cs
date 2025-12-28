@@ -1,25 +1,50 @@
-﻿using System;
+﻿using ManagerWorkers.Core.Exceptions;
 
 namespace ManagerWorkers.Core.Entities
 {
     public class User : EntityBase
     {
 
-        public string Name { get; set; } = String.Empty;
+        public User(string name, string email)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new DomainException("Nome é obrigatório");
 
-        public string Email { get; set; } = String.Empty;
+            if (string.IsNullOrWhiteSpace(email))
+                throw new DomainException("Email é obrigatório");
 
-        public string Password { get; set; } = String.Empty;
+            Name = name;
+            Email = email;
+            CreatedIn = DateTime.UtcNow;
+        }
 
-        public DateTime CreatedIn { get; set; }
+        public string Name { get; private set; } = String.Empty;
 
-        public DateTime UpdatedIn { get; set; }
+        public string Email { get; private set; } = String.Empty;
+
+        public string Password { get; private set; } = String.Empty;
+
+        public DateTime CreatedIn { get; private set; }
+
+        public DateTime UpdatedIn { get; private set; }
 
         // Foreign Key
-        public int RoleId { get; set; }
+        public int RoleId { get; private set; }
 
         // Navegação
-        public Role Role { get; set; } = new();
+        public Role Role { get; private set; } = new();
+
+
+        /* Métodos */
+        public void SetPassword(string passwordHash)
+        {
+
+            if (string.IsNullOrWhiteSpace(passwordHash))
+                throw new DomainException("Senha inválida.");
+
+            Password = passwordHash;
+            UpdatedIn = DateTime.UtcNow;
+        }
 
     }
 }

@@ -1,5 +1,8 @@
+using ManagerWorkers.API.Middlewares;
 using ManagerWorkers.Application.Services;
 using ManagerWorkers.Application.Services.Interfaces;
+using ManagerWorkers.Core.Repositories;
+using ManagerWorkers.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IRegisterUserService, RegisterUserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
@@ -24,7 +28,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseMiddleware<ExceptionMiddleware>();
 app.MapControllers();
 
 app.Run();
